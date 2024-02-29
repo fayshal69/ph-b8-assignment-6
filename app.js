@@ -40,7 +40,7 @@ const displayVideoByCategory = async(id, isSortByView) => {
         })
     }
 
-    displayVideoCard(cards, isSortByView);
+    displayVideoCard(cards);
 }
 
 const colorBtn = (clickedBtn) => {
@@ -57,7 +57,7 @@ const colorBtn = (clickedBtn) => {
 
 
 //show the video cards
-const displayVideoCard = (cards, isSortByView) => { 
+const displayVideoCard = (cards) => { 
     //clear the card container
     cardContainer.innerHTML = '';
 
