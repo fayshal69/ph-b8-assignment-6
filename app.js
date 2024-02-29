@@ -13,19 +13,33 @@ const fetchCatagories = async() => {
 const addCatagoriesBtn = (catagoriesList) => {
     let btnList = '';
     catagoriesList.forEach((item) => {
-        btnList += `<button class="btn  btn-ghost bg-slate-700 text-white text-lg" 
-        onclick="displayVideoByCategory(${item.category_id})">${item.category}</button>`;
+        btnList += `<button class="btn category-btn btn-ghost bg-slate-700 text-white text-lg" 
+        onclick="displayVideoByCategory(${item.category_id}); colorBtn(this)">${item.category}</button>`;
     });
     btnContainer.innerHTML = `${btnList}`;
 }
 
 //display video by category ,clicked on btn
-const displayVideoByCategory = async(id) => {
+const displayVideoByCategory = async(id = 1000) => {
     const res = await fetch(`https://openapi.programming-hero.com/api/videos/category/${id}`);
     const data = await res.json();
     const cards = data.data;
+
     displayVideoCard(cards);
 }
+
+const colorBtn = (clickedBtn) => {
+    
+    const allbtn = document.querySelectorAll('.category-btn');
+    for(const btn of allbtn) {
+        btn.classList.add('bg-slate-700');
+        btn.classList.remove('bg-red-500');
+    }
+
+    clickedBtn.classList.remove('bg-slate-700');
+    clickedBtn.classList.add('bg-red-500');
+}
+
 
 //show the video cards
 const displayVideoCard = (cards) => { 
@@ -37,8 +51,14 @@ const displayVideoCard = (cards) => {
     }
     else {
         errorElement.classList.add('hidden');
-        
-        cards.forEach((card) => { console.log(card);
+
+        cards.forEach((card) => { //console.log(card);
+
+            let img = '';
+            if(card.authors[0].verified) {
+                img += `<img class="w-6 h-6" src="./images/verify.png" alt=""></img>`;
+            }
+            
             const newCard = document.createElement('div');
             newCard.classList = `card w-full bg-base-100 shadow-xl`;
 
@@ -56,7 +76,7 @@ const displayVideoCard = (cards) => {
                             <h2 class="card-title">${card.title}</h2>
                             <div class="flex mt-3">
                                 <p class="mr-10">${card.authors[0].profile_name}</p>
-                                <img class="w-6 h-6" src="./images/verify.png" alt="">
+                                ${img}
                             </div>
                             <p class="mt-3">${card.others.views} Views</p>
                         </div>
@@ -69,3 +89,5 @@ const displayVideoCard = (cards) => {
 }
 
 fetchCatagories();
+
+displayVideoByCategory();
