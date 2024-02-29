@@ -1,6 +1,7 @@
 const btnContainer = document.getElementById('btn-container');
 const errorElement = document.getElementById('error-element');
 const cardContainer = document.getElementById('card-container');
+let defaultId = 1000, isSortByView = false;
 
 const fetchCatagories = async() => {
     const res = await fetch ('https://openapi.programming-hero.com/api/videos/categories');
@@ -20,12 +21,26 @@ const addCatagoriesBtn = (catagoriesList) => {
 }
 
 //display video by category ,clicked on btn
-const displayVideoByCategory = async(id = 1000) => {
+const displayVideoByCategory = async(id, isSortByView) => {
+    defaultId = id;
     const res = await fetch(`https://openapi.programming-hero.com/api/videos/category/${id}`);
     const data = await res.json();
-    const cards = data.data;
 
-    displayVideoCard(cards);
+    
+    const cards = data.data;
+    
+    if(isSortByView) {
+        cards.sort((a, b) => {
+            const totalViewFirst = a.others?.views;
+            const totalViewSecond = b.others?.views;
+            const totalViewFirstNumber = parseFloat(totalViewFirst.replace('k', '')) || 0;
+            const totalViewSecondNumber = parseFloat(totalViewSecond.replace('k', '')) || 0;
+
+            return totalViewSecondNumber - totalViewFirstNumber;
+        })
+    }
+
+    displayVideoCard(cards, isSortByView);
 }
 
 const colorBtn = (clickedBtn) => {
@@ -42,7 +57,7 @@ const colorBtn = (clickedBtn) => {
 
 
 //show the video cards
-const displayVideoCard = (cards) => { 
+const displayVideoCard = (cards, isSortByView) => { 
     //clear the card container
     cardContainer.innerHTML = '';
 
@@ -85,9 +100,14 @@ const displayVideoCard = (cards) => {
             `;
             cardContainer.appendChild(newCard);
         })
+
     }
+}
+
+const sortByViewBtn = () => {
+    displayVideoByCategory(defaultId, true)
 }
 
 fetchCatagories();
 
-displayVideoByCategory();
+displayVideoByCategory(defaultId, false);
