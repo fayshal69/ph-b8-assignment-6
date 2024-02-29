@@ -73,6 +73,8 @@ const displayVideoCard = (cards) => {
             if(card.authors[0].verified) {
                 img += `<img class="w-6 h-6" src="./images/verify.png" alt=""></img>`;
             }
+
+            
             
             const newCard = document.createElement('div');
             newCard.classList = `card w-full bg-base-100 shadow-xl`;
@@ -80,7 +82,7 @@ const displayVideoCard = (cards) => {
             newCard.innerHTML = `
             <figure class="overflow-hidden h-72">
                     <img class="w-full" src="${card.thumbnail}" alt="Shoes" />
-                    <h6 class="absolute bottom-[40%] right-12">0 hr</h6>
+                    <h6 class="absolute bottom-[40%] right-12 bg-black text-white p-1 rounded"></h6>
             </figure>
             <div class="card-body">
                     <div class="flex space-x-4 justify-start items-start">
